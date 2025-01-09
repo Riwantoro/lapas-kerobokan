@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistem Pencatatan Tahanan Lapas Kerobokan</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container mt-5">
+    <h1 class="text-center mb-4">Sistem Pencatatan Tahanan Lapas Kerobokan</h1>
+    <form id="form-sidang">
+      <div class="mb-3">
+        <label for="lokasi-sidang" class="form-label">Lokasi Sidang</label>
+        <select class="form-select" id="lokasi-sidang" required>
+          <option value="">Pilih Lokasi</option>
+          <option value="Badung">Badung</option>
+          <option value="Denpasar">Denpasar</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="tanggal-sidang" class="form-label">Tanggal Sidang</label>
+        <input type="date" class="form-control" id="tanggal-sidang" required>
+      </div>
+      <div class="mb-3">
+        <button type="button" class="btn btn-primary" id="tambah-baris">Tambah Baris</button>
+      </div>
+      <table class="table table-bordered" id="tabel-tahanan">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Nama Tahanan</th>
+            <th>Vonis (Tahun)</th>
+            <th>Banding (Ya/Tidak)</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Baris akan ditambahkan secara dinamis -->
+        </tbody>
+      </table>
+      <button type="submit" class="btn btn-success">Simpan Data</button>
+    </form>
+    <div id="peringatan" class="alert alert-warning mt-3 d-none"></div>
+    <div id="notifikasi" class="alert alert-success mt-3 d-none"></div>
+  </div>
+  <!-- Bootstrap JS dan Popper.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

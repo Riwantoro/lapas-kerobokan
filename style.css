@@ -1,0 +1,11 @@
+body {
+    font-family: Arial, sans-serif;
+  }
+  
+  #tabel-tahanan {
+    margin-top: 20px;
+  }
+  
+  #peringatan, #notifikasi {
+    display: none;
+  }
