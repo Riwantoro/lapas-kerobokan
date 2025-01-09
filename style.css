@@ -1,11 +1,27 @@
 body {
-    font-family: Arial, sans-serif;
-  }
-  
-  #tabel-tahanan {
-    margin-top: 20px;
-  }
-  
-  #peringatan, #notifikasi {
-    display: none;
-  }
+  font-family: Arial, sans-serif;
+}
+
+#tabel-tahanan, #tabel-data, #tabel-darurat {
+  margin-top: 20px;
+}
+
+#notifikasi {
+  display: none;
+}
+
+.table th, .table td {
+  vertical-align: middle;
+}
+
+.btn-warning {
+  background-color: #ffc107;
+  color: #000;
+}
+
+/* Warna untuk kolom Bebas Murni */
+.bebas-murni {
+  background-color: red;
+  color: white;
+  font-weight: bold;
+}
