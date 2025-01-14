@@ -5,6 +5,12 @@ document.addEventListener('DOMContentLoaded', async function () {
   const notifikasi = document.getElementById('notifikasi');
   const cariTahanan = document.getElementById('cari-tahanan');
 
+  // Fungsi untuk mengkonversi tahun ke bulan
+  function konversiKeBulan(tahun) {
+    const bulan = Math.round(tahun * 12); // Konversi tahun ke bulan dan bulatkan
+    return `${bulan} bulan`;
+  }
+
   // Fungsi untuk menambahkan baris ke tabel input
   document.getElementById('tambah-baris').addEventListener('click', function () {
     const barisBaru = tabelTahanan.insertRow();
@@ -85,7 +91,7 @@ document.addEventListener('DOMContentLoaded', async function () {
           barisBaru.innerHTML = `
             <td>${nomor}</td>
             <td>${item.nama}</td>
-            <td>${item.vonis}</td>
+            <td>${konversiKeBulan(item.vonis)}</td> <!-- Tampilkan vonis dalam bulan -->
             <td>${item.banding}</td>
             <td>${item.lokasiSidang}</td>
             <td>${item.tanggalSidang}</td>
@@ -114,6 +120,13 @@ document.addEventListener('DOMContentLoaded', async function () {
           const data = await window.db.getAllTahanan();
           delete data[key];
           await window.db.saveTahanan(data);
+
+          // Animasi menghapus baris
+          const row = e.target.closest('tr');
+          row.style.transition = 'opacity 0.3s ease';
+          row.style.opacity = '0';
+          setTimeout(() => row.remove(), 300); // Hapus baris setelah animasi selesai
+
           tampilkanDataTahanan();
         } catch (error) {
           alert('Gagal menghapus data: ' + error.message);
@@ -137,7 +150,7 @@ document.addEventListener('DOMContentLoaded', async function () {
           barisBaru.innerHTML = `
             <td>${nomor}</td>
             <td>${item.nama}</td>
-            <td>${item.vonis}</td>
+            <td>${konversiKeBulan(item.vonis)}</td> <!-- Tampilkan vonis dalam bulan -->
             <td>${item.banding}</td>
             <td>${item.lokasiSidang}</td>
             <td>${item.tanggalSidang}</td>

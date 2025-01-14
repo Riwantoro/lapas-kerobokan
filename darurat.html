@@ -10,13 +10,15 @@
   <link rel="stylesheet" href="style.css">
   <!-- Logo -->
   <link rel="icon" href="assets/logo.png" type="image/png">
+  <!-- Library SheetJS untuk ekspor Excel -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
 </head>
 <body class="bg-light">
   <div class="container mt-3">
     <!-- Header dengan Logo dan Judul -->
     <div class="text-center mb-4">
       <img src="assets/logo.png" alt="Logo Riwantoro Vonis Tracker" class="mb-3 logo-header">
-      <h1 class="text-primary fw-bold">Tahanan Darurat (Vonis di Bawah 1 Tahun 6 Bulan)</h1>
+      <h1 class="text-primary fw-bold">Vonis di Bawah 1 Tahun 6 Bulan</h1>
     </div>
 
     <!-- Tombol Kembali -->
@@ -24,17 +26,25 @@
       <a href="index.html" class="btn btn-primary btn-lg w-100">Kembali ke Halaman Utama</a>
     </div>
 
+    <!-- Tombol untuk ekspor data ke Excel -->
+    <div class="mb-3 text-center">
+      <button id="ekspor-excel" class="btn btn-success btn-lg w-100">Ekspor ke Excel</button>
+    </div>
+
+    <!-- Notifikasi -->
+    <div id="notifikasi" class="alert alert-success d-none"></div>
+
     <!-- Tabel Data Tahanan Darurat -->
     <div class="table-responsive">
       <table class="table table-bordered bg-white rounded shadow" id="tabel-darurat">
         <thead>
           <tr>
             <th>No</th>
-            <th>Nama Tahanan</th>
-            <th>Vonis (Tahun)</th>
+            <th>Nama</th>
+            <th>Vonis</th>
             <th>Banding</th>
-            <th>Lokasi Sidang</th>
-            <th>Tanggal Sidang</th>
+            <th>Lokasi</th>
+            <th>Tanggal</th>
             <th>Aksi</th>
           </tr>
         </thead>
