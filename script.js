@@ -10,9 +10,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     const barisBaru = tabelTahanan.insertRow();
     const nomorBaris = tabelTahanan.rows.length; // Hitung nomor baris dengan benar
     barisBaru.innerHTML = `
-      <td>${nomorBaris}</td> <!-- Nomor baris dimulai dari 1 -->
+      <td>${nomorBaris}</td>
       <td><input type="text" class="form-control nama-tahanan" placeholder="Nama Tahanan" required></td>
-      <td><input type="number" class="form-control vonis-bulan" placeholder="Vonis (Bulan)" required></td> <!-- Hanya bulan -->
+      <td><input type="number" class="form-control vonis-bulan" placeholder="Vonis (Bulan)" required></td>
       <td>
         <select class="form-select" required>
           <option value="Ya">Ya</option>
@@ -38,6 +38,10 @@ document.addEventListener('DOMContentLoaded', async function () {
   formSidang.addEventListener('submit', async function (e) {
     e.preventDefault();
 
+    // Konfirmasi sebelum menyimpan data
+    const konfirmasiSimpan = confirm('Apakah Anda yakin ingin menyimpan data?');
+    if (!konfirmasiSimpan) return;
+
     const lokasiSidang = document.getElementById('lokasi-sidang').value;
     const tanggalSidang = document.getElementById('tanggal-sidang').value;
     const dataTahanan = [];
@@ -46,7 +50,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     for (let i = 0; i < tabelTahanan.rows.length; i++) {
       const row = tabelTahanan.rows[i];
       const nama = row.querySelector('.nama-tahanan').value;
-      const vonisBulan = parseInt(row.querySelector('.vonis-bulan').value); // Ambil vonis dalam bulan
+      const vonisBulan = parseInt(row.querySelector('.vonis-bulan').value);
       const banding = row.querySelector('select').value;
 
       dataTahanan.push({
@@ -62,13 +66,24 @@ document.addEventListener('DOMContentLoaded', async function () {
     try {
       const data = await window.db.getAllTahanan();
       const newData = data ? data : {};
+
+      // Simpan semua data sekaligus
       dataTahanan.forEach((item, index) => {
-        newData[`tahanan${Date.now() + index}`] = item;
+        const key = `tahanan${Date.now() + index}`; // Gunakan timestamp unik untuk setiap data
+        newData[key] = item;
       });
+
       await window.db.saveTahanan(newData);
+
+      // Clear tabel input setelah simpan
+      tabelTahanan.innerHTML = '';
+
+      // Tampilkan notifikasi
       notifikasi.textContent = 'Data berhasil disimpan!';
       notifikasi.classList.remove('d-none');
       setTimeout(() => notifikasi.classList.add('d-none'), 3000);
+
+      // Tampilkan data terbaru
       tampilkanDataTahanan();
     } catch (error) {
       console.error('Gagal menyimpan data:', error);
@@ -90,7 +105,7 @@ document.addEventListener('DOMContentLoaded', async function () {
           barisBaru.innerHTML = `
             <td>${nomor}</td>
             <td>${item.nama}</td>
-            <td>${item.vonisBulan} bulan</td> <!-- Hanya bulan -->
+            <td>${item.vonisBulan} bulan</td>
             <td>${item.banding}</td>
             <td>${item.lokasiSidang}</td>
             <td>${item.tanggalSidang}</td>
@@ -109,9 +124,16 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
   }
 
-  // Fungsi untuk menghapus data tahanan
+  // Fungsi untuk menghapus data tahanan dengan password
   tabelData.addEventListener('click', async function (e) {
     if (e.target.classList.contains('hapus-data')) {
+      // Minta password sebelum menghapus
+      const password = prompt('Masukkan password untuk menghapus data:');
+      if (password !== 'azwarganteng') {
+        alert('Password salah! Data tidak dihapus.');
+        return;
+      }
+
       const konfirmasi = confirm('Apakah Anda yakin ingin menghapus data ini?');
       if (konfirmasi) {
         try {
@@ -119,6 +141,13 @@ document.addEventListener('DOMContentLoaded', async function () {
           const data = await window.db.getAllTahanan();
           delete data[key];
           await window.db.saveTahanan(data);
+
+          // Tampilkan notifikasi
+          notifikasi.textContent = 'Data berhasil dihapus!';
+          notifikasi.classList.remove('d-none');
+          setTimeout(() => notifikasi.classList.add('d-none'), 3000);
+
+          // Tampilkan data terbaru
           tampilkanDataTahanan();
         } catch (error) {
           alert('Gagal menghapus data: ' + error.message);

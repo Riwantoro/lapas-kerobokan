@@ -1,9 +1,21 @@
 /* style.css */
+/* Gaya dasar */
 body {
   font-family: 'Poppins', sans-serif;
   background-color: #f8f9fa;
+  margin: 0;
+  padding: 0;
 }
 
+/* Container */
+.container {
+  width: 90%; /* Container mengambil 90% lebar layar */
+  max-width: 1200px; /* Maksimum lebar container */
+  margin: 0 auto; /* Pusatkan container */
+  padding: 20px;
+}
+
+/* Header */
 h1 {
   font-family: 'Poppins', sans-serif;
   font-weight: 700;
@@ -27,49 +39,7 @@ h2 {
   height: auto;
 }
 
-.table {
-  background-color: #fff;
-  font-size: 0.9rem;
-}
-
-.table th, .table td {
-  vertical-align: middle;
-  padding: 8px;
-}
-
-.btn-warning {
-  background-color: #ffc107;
-  color: #000;
-}
-
-.btn-primary, .btn-success {
-  width: 100%;
-  margin-bottom: 10px;
-}
-
-.alert {
-  margin-top: 20px;
-  font-size: 0.9rem;
-}
-
-.vonis-rendah {
-  background-color: #ffcccc;
-  color: #cc0000;
-  font-weight: bold;
-}
-
-.shadow {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.rounded {
-  border-radius: 8px;
-}
-
-.table-responsive {
-  overflow-x: auto;
-}
-/* Gaya dasar untuk tabel */
+/* Tabel */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -80,44 +50,71 @@ h2 {
   overflow: hidden;
 }
 
-/* Header tabel */
+.table th, .table td {
+  padding: 12px;
+  vertical-align: middle;
+  text-align: left;
+}
+
 .table thead th {
   background-color: #007bff;
   color: #fff;
   font-weight: 600;
-  padding: 12px;
-  text-align: left;
 }
 
-/* Baris tabel */
 .table tbody tr {
   border-bottom: 1px solid #ddd;
   transition: background-color 0.3s ease;
 }
 
-/* Efek hover pada baris tabel */
 .table tbody tr:hover {
   background-color: #f1f1f1;
 }
 
-/* Sel tabel */
-.table tbody td {
-  padding: 12px;
-  color: #333;
-}
-
-/* Tombol aksi */
+/* Tombol */
 .btn {
-  padding: 6px 12px;
+  padding: 8px 16px;
   font-size: 14px;
   border-radius: 4px;
   transition: background-color 0.3s ease;
+  text-align: center;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #0d6efd;
+  color: #fff;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #0b5ed7;
+}
+
+.btn-success {
+  background-color: #198754;
+  color: #fff;
+  border: none;
+}
+
+.btn-success:hover {
+  background-color: #157347;
+}
+
+.btn-warning {
+  background-color: #ffc107;
+  color: #000;
+  border: none;
+}
+
+.btn-warning:hover {
+  background-color: #e0a800;
 }
 
 .btn-danger {
   background-color: #dc3545;
-  border: none;
   color: #fff;
+  border: none;
 }
 
 .btn-danger:hover {
@@ -150,111 +147,30 @@ h2 {
   }
 }
 
-/* Responsif untuk tabel */
-@media (max-width: 768px) {
-  .table thead {
-    display: none;
-  }
-
-  .table tbody tr {
-    display: block;
-    margin-bottom: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-  }
-
-  .table tbody td {
-    display: block;
-    text-align: right;
-    padding: 8px;
-    border-bottom: 1px solid #ddd;
-  }
-
-  .table tbody td::before {
-    content: attr(data-label);
-    float: left;
-    font-weight: bold;
-    text-transform: uppercase;
-    color: #007bff;
-  }
-}
-
-/* style.css */
-body {
-  font-family: 'Poppins', sans-serif;
-  background-color: #f8f9fa;
-}
-
-h1 {
-  font-family: 'Poppins', sans-serif;
-  font-weight: 700;
-  font-size: 2.5rem;
-  color: #0d6efd;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 20px;
-}
-
-h2 {
-  font-family: 'Poppins', sans-serif;
-  font-weight: 600;
-  font-size: 2rem;
-  color: #0d6efd;
-  margin-bottom: 15px;
-}
-
-.logo-header {
-  width: 80px;
-  height: auto;
-}
-
-.table {
-  background-color: #fff;
-  font-size: 0.9rem;
-}
-
-.table th, .table td {
-  vertical-align: middle;
-  padding: 8px;
-}
-
-.btn-warning {
-  background-color: #ffc107;
-  color: #000;
-}
-
-.btn-primary, .btn-success {
-  width: 100%;
-  margin-bottom: 10px;
-}
-
-.alert {
-  margin-top: 20px;
-  font-size: 0.9rem;
-}
-
-.shadow {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.rounded {
-  border-radius: 8px;
-}
-
-.table-responsive {
-  overflow-x: auto;
-}
-
-/* style.css */
+/* Footer */
 .footer {
   position: fixed;
   bottom: 0;
   width: 100%;
-  background-color: #f8f9fa; /* Warna latar belakang */
-  border-top: 1px solid #e9ecef; /* Garis atas footer */
+  background-color: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+  text-align: center;
+  padding: 10px 0;
 }
 
 .footer .text-muted {
-  font-size: 0.9rem; /* Ukuran teks */
-  color: #6c757d; /* Warna teks */
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+/* Responsif (opsional, jika diperlukan) */
+@media (max-width: 768px) {
+  .container {
+    width: 100%; /* Container mengambil 100% lebar layar di mobile */
+    padding: 0 15px; /* Tambahkan padding agar konten tidak menempel ke tepi */
+  }
+
+  .table-responsive {
+    overflow-x: auto; /* Aktifkan scroll horizontal di mobile */
+  }
 }
