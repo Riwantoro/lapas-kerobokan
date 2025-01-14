@@ -14,14 +14,13 @@
 <body class="bg-light">
   <div class="container mt-3">
     <!-- Header dengan Logo dan Judul -->
-<!-- Header dengan Logo dan Judul -->
-<div class="text-center mb-4">
-  <img src="assets/logo.png" alt="Logo Riwantoro Vonis Tracker" class="mb-3 logo-header">
-  <h1 class="text-primary fw-bold">Vonis Tracker</h1> <!-- Judul lebih ringkas -->
-</div>
+    <div class="text-center mb-4">
+      <img src="assets/logo.png" alt="Logo Riwantoro Vonis Tracker" class="mb-3 logo-header">
+      <h1 class="text-primary fw-bold">Vonis Tracker</h1>
+    </div>
 
-<!-- Notifikasi -->
-<div id="notifikasi" class="alert alert-success d-none"></div>
+    <!-- Notifikasi -->
+    <div id="notifikasi" class="alert alert-success d-none"></div>
 
     <!-- Tombol untuk menuju halaman khusus -->
     <div class="mb-3 text-center">
@@ -53,7 +52,7 @@
             <tr>
               <th>No</th>
               <th>Nama Tahanan</th>
-              <th>Vonis (Tahun)</th>
+              <th>Vonis (Bulan)</th> <!-- Hanya kolom bulan -->
               <th>Banding (Ya/Tidak)</th>
               <th>Aksi</th>
             </tr>
@@ -75,25 +74,25 @@
     </div>
 
     <!-- Tabel Data yang Disimpan -->
-<h2 class="text-center mb-3 text-primary">Data Tahanan</h2> <!-- Judul lebih ringkas -->
-<div class="table-responsive">
-  <table class="table table-bordered bg-white rounded shadow" id="tabel-data">
-    <thead>
-      <tr>
-        <th>No</th>
-        <th>Nama</th> <!-- Persingkat "Nama Tahanan" menjadi "Nama" -->
-        <th>Vonis</th> <!-- Persingkat "Vonis (Bulan)" menjadi "Vonis" -->
-        <th>Banding</th>
-        <th>Lokasi</th> <!-- Persingkat "Lokasi Sidang" menjadi "Lokasi" -->
-        <th>Tanggal</th> <!-- Persingkat "Tanggal Sidang" menjadi "Tanggal" -->
-        <th>Aksi</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Data akan ditampilkan di sini -->
-    </tbody>
-  </table>
-</div>
+    <h2 class="text-center mb-3 text-primary">Data Tahanan</h2>
+    <div class="table-responsive">
+      <table class="table table-bordered bg-white rounded shadow" id="tabel-data">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Nama</th>
+            <th>Vonis (Bulan)</th> <!-- Hanya kolom bulan -->
+            <th>Banding</th>
+            <th>Lokasi</th>
+            <th>Tanggal</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Data akan ditampilkan di sini -->
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <!-- Scripts -->

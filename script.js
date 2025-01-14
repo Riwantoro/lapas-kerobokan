@@ -5,19 +5,14 @@ document.addEventListener('DOMContentLoaded', async function () {
   const notifikasi = document.getElementById('notifikasi');
   const cariTahanan = document.getElementById('cari-tahanan');
 
-  // Fungsi untuk mengkonversi tahun ke bulan
-  function konversiKeBulan(tahun) {
-    const bulan = Math.round(tahun * 12); // Konversi tahun ke bulan dan bulatkan
-    return `${bulan} bulan`;
-  }
-
   // Fungsi untuk menambahkan baris ke tabel input
   document.getElementById('tambah-baris').addEventListener('click', function () {
     const barisBaru = tabelTahanan.insertRow();
+    const nomorBaris = tabelTahanan.rows.length; // Hitung nomor baris dengan benar
     barisBaru.innerHTML = `
-      <td>${tabelTahanan.rows.length + 1}</td>
-      <td><input type="text" class="form-control" placeholder="Nama Tahanan" required></td>
-      <td><input type="number" class="form-control" placeholder="Vonis (Tahun)" step="0.1" required></td>
+      <td>${nomorBaris}</td> <!-- Nomor baris dimulai dari 1 -->
+      <td><input type="text" class="form-control nama-tahanan" placeholder="Nama Tahanan" required></td>
+      <td><input type="number" class="form-control vonis-bulan" placeholder="Vonis (Bulan)" required></td> <!-- Hanya bulan -->
       <td>
         <select class="form-select" required>
           <option value="Ya">Ya</option>
@@ -32,6 +27,10 @@ document.addEventListener('DOMContentLoaded', async function () {
   tabelTahanan.addEventListener('click', function (e) {
     if (e.target.classList.contains('hapus-baris')) {
       e.target.closest('tr').remove();
+      // Perbarui nomor baris setelah menghapus
+      Array.from(tabelTahanan.rows).forEach((row, index) => {
+        row.cells[0].textContent = index + 1;
+      });
     }
   });
 
@@ -46,13 +45,13 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Ambil data dari tabel input
     for (let i = 0; i < tabelTahanan.rows.length; i++) {
       const row = tabelTahanan.rows[i];
-      const nama = row.cells[1].querySelector('input').value;
-      const vonis = parseFloat(row.cells[2].querySelector('input').value);
-      const banding = row.cells[3].querySelector('select').value;
+      const nama = row.querySelector('.nama-tahanan').value;
+      const vonisBulan = parseInt(row.querySelector('.vonis-bulan').value); // Ambil vonis dalam bulan
+      const banding = row.querySelector('select').value;
 
       dataTahanan.push({
         nama,
-        vonis,
+        vonisBulan,
         banding,
         lokasiSidang,
         tanggalSidang
@@ -91,7 +90,7 @@ document.addEventListener('DOMContentLoaded', async function () {
           barisBaru.innerHTML = `
             <td>${nomor}</td>
             <td>${item.nama}</td>
-            <td>${konversiKeBulan(item.vonis)}</td> <!-- Tampilkan vonis dalam bulan -->
+            <td>${item.vonisBulan} bulan</td> <!-- Hanya bulan -->
             <td>${item.banding}</td>
             <td>${item.lokasiSidang}</td>
             <td>${item.tanggalSidang}</td>
@@ -120,13 +119,6 @@ document.addEventListener('DOMContentLoaded', async function () {
           const data = await window.db.getAllTahanan();
           delete data[key];
           await window.db.saveTahanan(data);
-
-          // Animasi menghapus baris
-          const row = e.target.closest('tr');
-          row.style.transition = 'opacity 0.3s ease';
-          row.style.opacity = '0';
-          setTimeout(() => row.remove(), 300); // Hapus baris setelah animasi selesai
-
           tampilkanDataTahanan();
         } catch (error) {
           alert('Gagal menghapus data: ' + error.message);
@@ -150,7 +142,7 @@ document.addEventListener('DOMContentLoaded', async function () {
           barisBaru.innerHTML = `
             <td>${nomor}</td>
             <td>${item.nama}</td>
-            <td>${konversiKeBulan(item.vonis)}</td> <!-- Tampilkan vonis dalam bulan -->
+            <td>${item.vonisBulan} bulan</td>
             <td>${item.banding}</td>
             <td>${item.lokasiSidang}</td>
             <td>${item.tanggalSidang}</td>

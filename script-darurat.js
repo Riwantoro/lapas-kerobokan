@@ -1,12 +1,6 @@
 document.addEventListener('DOMContentLoaded', async function () {
   const tabelDarurat = document.getElementById('tabel-darurat').getElementsByTagName('tbody')[0];
 
-  // Fungsi untuk mengkonversi tahun ke bulan
-  function konversiKeBulan(tahun) {
-    const bulan = Math.round(tahun * 12); // Konversi tahun ke bulan dan bulatkan
-    return `${bulan} bulan`;
-  }
-
   // Fungsi untuk menampilkan data darurat
   async function tampilkanDataDarurat() {
     try {
@@ -20,18 +14,18 @@ document.addEventListener('DOMContentLoaded', async function () {
           const item = data[key];
 
           // Pastikan vonis adalah angka
-          const vonis = parseFloat(item.vonis);
+          const vonisBulan = parseInt(item.vonisBulan);
 
-          // Filter tahanan dengan vonis di bawah 1,6 tahun
-          if (!isNaN(vonis) && vonis < 1.6) {
+          // Filter tahanan dengan vonis di bawah 12 bulan (1 tahun)
+          if (!isNaN(vonisBulan) && vonisBulan < 12) {
             const barisBaru = tabelDarurat.insertRow();
             barisBaru.innerHTML = `
               <td>${nomor}</td>
               <td>${item.nama}</td>
-              <td>${konversiKeBulan(vonis)}</td> <!-- Tampilkan vonis dalam bulan -->
+              <td>${vonisBulan} bulan</td> <!-- Tampilkan vonis dalam bulan -->
               <td>${item.banding}</td>
               <td>${item.lokasiSidang || 'Tidak ada data'}</td>  <!-- Tampilkan lokasiSidang -->
-              <td>${item.tanggalSidang || item.tanggalPenangkapan || 'Tidak ada data'}</td> <!-- Gunakan tanggalSidang atau tanggalPenangkapan -->
+              <td>${item.tanggalSidang || 'Tidak ada data'}</td> <!-- Tampilkan tanggalSidang -->
               <td>
                 <button class="btn btn-danger btn-sm hapus-data" data-key="${key}">Hapus</button>
               </td>
@@ -84,18 +78,18 @@ document.addEventListener('DOMContentLoaded', async function () {
       const data = await window.db.getAllTahanan();  // Ambil data dari Firebase
       const dataFiltered = [];
 
-      // Filter data dengan vonis di bawah 1,6 tahun
+      // Filter data dengan vonis di bawah 12 bulan (1 tahun)
       for (const key in data) {
         const item = data[key];
-        const vonis = parseFloat(item.vonis);
-        if (!isNaN(vonis) && vonis < 1.6) {
+        const vonisBulan = parseInt(item.vonisBulan);
+        if (!isNaN(vonisBulan) && vonisBulan < 12) {
           dataFiltered.push({
             No: dataFiltered.length + 1,
             Nama: item.nama,
-            Vonis: `${Math.round(item.vonis * 12)} bulan`, // Konversi ke bulan
+            Vonis: `${item.vonisBulan} bulan`, // Tampilkan vonis dalam bulan
             Banding: item.banding,
             Lokasi: item.lokasiSidang || 'Tidak ada data',
-            Tanggal: item.tanggalSidang || item.tanggalPenangkapan || 'Tidak ada data'
+            Tanggal: item.tanggalSidang || 'Tidak ada data'
           });
         }
       }
