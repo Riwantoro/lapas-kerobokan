@@ -3,82 +3,74 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tahanan Darurat - Lapas Kerobokan</title>
-  <link rel="stylesheet" href="assets/bootstrap.min.css">
+  <title>Tahanan Darurat - Riwantoro Vonis Tracker</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="style.css">
+  <!-- Logo -->
+  <link rel="icon" href="assets/logo.png" type="image/png">
 </head>
-<body>
-  <div class="container mt-5">
-    <h1 class="text-center mb-4">Tahanan Darurat (Vonis di Bawah 1 Tahun 6 Bulan)</h1>
-    <div class="mb-3">
-      <a href="index.html" class="btn btn-primary">Kembali ke Halaman Utama</a>
+<body class="bg-light">
+  <div class="container mt-3">
+    <!-- Header dengan Logo dan Judul -->
+    <div class="text-center mb-4">
+      <img src="assets/logo.png" alt="Logo Riwantoro Vonis Tracker" class="mb-3 logo-header">
+      <h1 class="text-primary fw-bold">Tahanan Darurat (Vonis di Bawah 1 Tahun 6 Bulan)</h1>
+    </div>
+
+    <!-- Tombol Kembali -->
+    <div class="mb-3 text-center">
+      <a href="index.html" class="btn btn-primary btn-lg w-100">Kembali ke Halaman Utama</a>
     </div>
 
     <!-- Tabel Data Tahanan Darurat -->
-    <table class="table table-bordered" id="tabel-darurat">
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>Nama Tahanan</th>
-          <th>Vonis (Tahun)</th>
-          <th>Banding</th>
-          <th>Tanggal Penangkapan</th>
-          <th>Bebas Murni</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Data akan ditampilkan di sini -->
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table class="table table-bordered bg-white rounded shadow" id="tabel-darurat">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Nama Tahanan</th>
+            <th>Vonis (Tahun)</th>
+            <th>Banding</th>
+            <th>Lokasi Sidang</th>
+            <th>Tanggal Sidang</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Data akan ditampilkan di sini -->
+        </tbody>
+      </table>
+    </div>
   </div>
-  <script src="assets/bootstrap.bundle.min.js"></script>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="script-darurat.js"></script>
- <!-- Firebase SDK -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-  import { getDatabase, ref, get, set, child } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
-  // Konfigurasi Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyDLAqtMXrBTy_IIb5IuYyTA-lIAz5QL_Js",
-    authDomain: "riwantoro-tahanan-tracker.firebaseapp.com",
-    databaseURL: "https://riwantoro-tahanan-tracker-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "riwantoro-tahanan-tracker",
-    storageBucket: "riwantoro-tahanan-tracker.firebasestorage.app",
-    messagingSenderId: "1071540856865",
-    appId: "1:1071540856865:web:f50cfd5a42ee7e2a5a5b60",
-    measurementId: "G-S24K50PN8N"
-  };
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+    import { getDatabase, ref, get, set, child } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+    import { firebaseConfig } from './firebase-config.js';
 
-  // Inisialisasi Firebase
-  const app = initializeApp(firebaseConfig);
-  const database = getDatabase(app);
+    // Inisialisasi Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
 
-  // Membuat objek global untuk akses database
-  window.db = {
-    async getAllTahanan() {
-      const dbRef = ref(database);
-      const snapshot = await get(child(dbRef, 'tahanan'));
-      return snapshot.exists() ? snapshot.val() : [];
-    },
-    
-    async getAllDarurat() {
-      const dbRef = ref(database);
-      const snapshot = await get(child(dbRef, 'darurat'));
-      return snapshot.exists() ? snapshot.val() : [];
-    },
-    
-    async saveTahanan(data) {
-      const tahananRef = ref(database, 'tahanan');
-      await set(tahananRef, data);
-    },
-    
-    async saveDarurat(data) {
-      const daruratRef = ref(database, 'darurat');
-      await set(daruratRef, data);
-    }
-  };
-</script>
+    // Membuat objek global untuk akses database
+    window.db = {
+      async getAllTahanan() {
+        const dbRef = ref(database);
+        const snapshot = await get(child(dbRef, 'tahanan'));  // Ambil data dari path /tahanan
+        return snapshot.exists() ? snapshot.val() : {};
+      },
+      async saveTahanan(data) {
+        const tahananRef = ref(database, 'tahanan');
+        await set(tahananRef, data);
+      }
+    };
+  </script>
 </body>
 </html>
