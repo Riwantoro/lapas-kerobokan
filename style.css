@@ -244,3 +244,17 @@ h2 {
 .table-responsive {
   overflow-x: auto;
 }
+
+/* style.css */
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #f8f9fa; /* Warna latar belakang */
+  border-top: 1px solid #e9ecef; /* Garis atas footer */
+}
+
+.footer .text-muted {
+  font-size: 0.9rem; /* Ukuran teks */
+  color: #6c757d; /* Warna teks */
+}
