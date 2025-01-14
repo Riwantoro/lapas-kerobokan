@@ -1,4 +1,6 @@
-document.addEventListener('DOMContentLoaded', function () {
+import { ref, get, set, child } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+
+document.addEventListener('DOMContentLoaded', async function() {
   const form = document.getElementById('form-sidang');
   const tabelTahanan = document.getElementById('tabel-tahanan').getElementsByTagName('tbody')[0];
   const tabelData = document.getElementById('tabel-data').getElementsByTagName('tbody')[0];
@@ -6,28 +8,40 @@ document.addEventListener('DOMContentLoaded', function () {
   const inputCari = document.getElementById('cari-tahanan');
   let nomorUrut = 1;
 
-  // Load data dari Local Storage
-  let dataTahanan = JSON.parse(localStorage.getItem('dataTahanan')) || [];
-  let dataDarurat = JSON.parse(localStorage.getItem('dataDarurat')) || [];
+  // Ambil referensi database
+  const database = window.db.database;
 
-  // Fungsi untuk mengonversi vonis ke format "X tahun Y bulan"
+  // Fungsi untuk mengambil data dari Firebase
+  async function getDataFromFirebase(path) {
+    const dbRef = ref(database);
+    const snapshot = await get(child(dbRef, path));
+    return snapshot.exists() ? snapshot.val() : [];
+  }
+
+  // Load data awal
+  let dataTahanan = await getDataFromFirebase('tahanan');
+  let dataDarurat = await getDataFromFirebase('darurat');
+
+  // Konversi data ke array jika bukan array
+  dataTahanan = Array.isArray(dataTahanan) ? dataTahanan : [];
+  dataDarurat = Array.isArray(dataDarurat) ? dataDarurat : [];
+
+  // Fungsi format vonis
   function formatVonis(vonis) {
     const tahun = Math.floor(vonis);
     const bulan = Math.round((vonis - tahun) * 12);
     return `${tahun} tahun ${bulan} bulan`;
   }
 
-  // Fungsi untuk menghitung tanggal selesai vonis
+  // Fungsi hitung bebas murni
   function hitungBebasMurni(tanggalPenangkapan, vonis) {
     const tanggalPenangkapanObj = new Date(tanggalPenangkapan);
     const tahun = Math.floor(vonis);
     const bulan = Math.round((vonis - tahun) * 12);
 
-    // Tambahkan tahun dan bulan ke tanggal penangkapan
     tanggalPenangkapanObj.setFullYear(tanggalPenangkapanObj.getFullYear() + tahun);
     tanggalPenangkapanObj.setMonth(tanggalPenangkapanObj.getMonth() + bulan);
 
-    // Format tanggal ke "YYYY-MM-DD"
     const tahunBebas = tanggalPenangkapanObj.getFullYear();
     const bulanBebas = String(tanggalPenangkapanObj.getMonth() + 1).padStart(2, '0');
     const hariBebas = String(tanggalPenangkapanObj.getDate()).padStart(2, '0');
@@ -35,8 +49,8 @@ document.addEventListener('DOMContentLoaded', function () {
     return `${tahunBebas}-${bulanBebas}-${hariBebas}`;
   }
 
-  // Fungsi untuk menampilkan data di tabel
-  function tampilkanData(data) {
+  // Fungsi tampilkan data
+  async function tampilkanData(data) {
     tabelData.innerHTML = '';
     data.forEach((item, index) => {
       const barisBaru = tabelData.insertRow();
@@ -53,11 +67,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Tampilkan data saat halaman dimuat
+  // Tampilkan data awal
   tampilkanData(dataTahanan);
 
-  // Tambah baris
-  document.getElementById('tambah-baris').addEventListener('click', function () {
+  // Event listener untuk tombol tambah baris
+  document.getElementById('tambah-baris').addEventListener('click', function() {
     if (tabelTahanan.rows.length < 100) {
       const barisBaru = tabelTahanan.insertRow();
       barisBaru.innerHTML = `
@@ -80,22 +94,21 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  // Hapus baris input
-  tabelTahanan.addEventListener('click', function (e) {
+  // Event listener untuk hapus baris
+  tabelTahanan.addEventListener('click', function(e) {
     if (e.target.classList.contains('hapus-baris')) {
       e.target.closest('tr').remove();
       nomorUrut--;
     }
   });
 
-  // Simpan data
-  form.addEventListener('submit', function (e) {
+  // Event listener untuk form submit
+  form.addEventListener('submit', async function(e) {
     e.preventDefault();
 
     const data = [];
     const rows = tabelTahanan.rows;
 
-    // Ambil data dari tabel input
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i];
       const nama = row.cells[1].querySelector('input').value;
@@ -105,48 +118,55 @@ document.addEventListener('DOMContentLoaded', function () {
 
       data.push({ nama, vonis, banding, tanggalPenangkapan });
 
-      // Cek vonis di bawah 1 tahun 6 bulan
       if (vonis < 1.5) {
         dataDarurat.push({ nama, vonis, banding, tanggalPenangkapan });
-        alert(`Peringatan: ${nama} memiliki vonis di bawah 1 tahun 6 bulan!`);
       }
     }
 
-    // Simpan data ke Local Storage
-    dataTahanan = dataTahanan.concat(data);
-    localStorage.setItem('dataTahanan', JSON.stringify(dataTahanan));
-    localStorage.setItem('dataDarurat', JSON.stringify(dataDarurat));
+    try {
+      dataTahanan = dataTahanan.concat(data);
+      await set(ref(database, 'tahanan'), dataTahanan);
+      await set(ref(database, 'darurat'), dataDarurat);
 
-    // Tampilkan data
-    tampilkanData(dataTahanan);
+      tampilkanData(dataTahanan);
 
-    // Tampilkan notifikasi
-    notifikasi.textContent = 'Data berhasil disimpan!';
-    notifikasi.classList.remove('d-none');
-    setTimeout(() => notifikasi.classList.add('d-none'), 3000);
+      notifikasi.textContent = 'Data berhasil disimpan!';
+      notifikasi.classList.remove('d-none');
+      setTimeout(() => notifikasi.classList.add('d-none'), 3000);
 
-    // Reset form input
-    tabelTahanan.innerHTML = '';
-    nomorUrut = 1;
+      tabelTahanan.innerHTML = '';
+      nomorUrut = 1;
+    } catch (error) {
+      notifikasi.textContent = 'Gagal menyimpan data: ' + error.message;
+      notifikasi.classList.remove('d-none');
+      notifikasi.classList.remove('alert-success');
+      notifikasi.classList.add('alert-danger');
+    }
   });
 
-  // Hapus data dengan konfirmasi
-  tabelData.addEventListener('click', function (e) {
+  // Event listener untuk hapus data
+  tabelData.addEventListener('click', async function(e) {
     if (e.target.classList.contains('hapus-data')) {
       const konfirmasi = confirm('Apakah Anda yakin ingin menghapus data ini?');
       if (konfirmasi) {
-        const index = e.target.getAttribute('data-index');
-        dataTahanan.splice(index, 1);
-        localStorage.setItem('dataTahanan', JSON.stringify(dataTahanan));
-        tampilkanData(dataTahanan);
+        try {
+          const index = e.target.getAttribute('data-index');
+          dataTahanan.splice(index, 1);
+          await set(ref(database, 'tahanan'), dataTahanan);
+          tampilkanData(dataTahanan);
+        } catch (error) {
+          alert('Gagal menghapus data: ' + error.message);
+        }
       }
     }
   });
 
-  // Fitur Pencarian
-  inputCari.addEventListener('input', function () {
+  // Event listener untuk pencarian
+  inputCari.addEventListener('input', function() {
     const keyword = inputCari.value.toLowerCase();
-    const hasilPencarian = dataTahanan.filter(item => item.nama.toLowerCase().includes(keyword));
+    const hasilPencarian = dataTahanan.filter(item => 
+      item.nama.toLowerCase().includes(keyword)
+    );
     tampilkanData(hasilPencarian);
   });
 });

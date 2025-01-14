@@ -34,5 +34,51 @@
   </div>
   <script src="assets/bootstrap.bundle.min.js"></script>
   <script src="script-darurat.js"></script>
+ <!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+  import { getDatabase, ref, get, set, child } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+
+  // Konfigurasi Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyDLAqtMXrBTy_IIb5IuYyTA-lIAz5QL_Js",
+    authDomain: "riwantoro-tahanan-tracker.firebaseapp.com",
+    databaseURL: "https://riwantoro-tahanan-tracker-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "riwantoro-tahanan-tracker",
+    storageBucket: "riwantoro-tahanan-tracker.firebasestorage.app",
+    messagingSenderId: "1071540856865",
+    appId: "1:1071540856865:web:f50cfd5a42ee7e2a5a5b60",
+    measurementId: "G-S24K50PN8N"
+  };
+
+  // Inisialisasi Firebase
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+
+  // Membuat objek global untuk akses database
+  window.db = {
+    async getAllTahanan() {
+      const dbRef = ref(database);
+      const snapshot = await get(child(dbRef, 'tahanan'));
+      return snapshot.exists() ? snapshot.val() : [];
+    },
+    
+    async getAllDarurat() {
+      const dbRef = ref(database);
+      const snapshot = await get(child(dbRef, 'darurat'));
+      return snapshot.exists() ? snapshot.val() : [];
+    },
+    
+    async saveTahanan(data) {
+      const tahananRef = ref(database, 'tahanan');
+      await set(tahananRef, data);
+    },
+    
+    async saveDarurat(data) {
+      const daruratRef = ref(database, 'darurat');
+      await set(daruratRef, data);
+    }
+  };
+</script>
 </body>
 </html>

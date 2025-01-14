@@ -79,7 +79,29 @@
       </tbody>
     </table>
   </div>
+
+  <!-- Scripts -->
   <script src="assets/bootstrap.bundle.min.js"></script>
-  <script src="script.js"></script>
+  
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+    import { getDatabase, ref, get, set, child } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+    import { firebaseConfig } from './firebase-config.js';
+
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+
+    window.db = {
+      database,
+      ref,
+      get,
+      set,
+      child
+    };
+  </script>
+
+  <!-- Main Script -->
+  <script type="module" src="script.js"></script>
 </body>
 </html>
