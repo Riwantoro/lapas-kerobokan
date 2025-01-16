@@ -47,9 +47,16 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
   }
 
-  // Fungsi untuk menghapus data darurat
+  // Fungsi untuk menghapus data darurat dengan password
   tabelDarurat.addEventListener('click', async function (e) {
     if (e.target.classList.contains('hapus-data')) {
+      // Minta password sebelum menghapus
+      const password = prompt('Masukkan password untuk menghapus data:');
+      if (password !== 'azwarganteng') { // Ganti dengan password yang diinginkan
+        alert('Password salah! Data tidak dihapus.');
+        return;
+      }
+
       const konfirmasi = confirm('Apakah Anda yakin ingin menghapus data ini?');
       if (konfirmasi) {
         try {
